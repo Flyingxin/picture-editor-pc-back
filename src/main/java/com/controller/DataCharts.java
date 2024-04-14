@@ -33,7 +33,7 @@ public class DataCharts {
         if (startDate == "" && endDate == "") return ApiResponse.error(400,"请求参数错误");
 
         try {
-            String sql = "select * from statistic_day_amount where date between ? and ?";
+            String sql = "select * from statistic_day_amount where date between ? and ? order by date asc";
 //            String sql="select DATE(createTime) as date, count(*) as count from user_info where DATE(createTime) between ? and ? group by DATE(createTime)";
             List<Map<String, Object>> results = jdbcTemplate.queryForList(sql, new Object[]{startDate, endDate});
             return ApiResponse.success(results,"查询成功");
@@ -49,7 +49,7 @@ public class DataCharts {
     public ApiResponse<List<Map<String, Object>>> dayVip(@RequestParam String startDate, @RequestParam String endDate){
         if (startDate == "" && endDate == "") return ApiResponse.error(400,"请求参数错误");
         try {
-            String sql = "select * from statistic_day_vip where date between ? and ?";
+            String sql = "select * from statistic_day_vip where date between ? and ? order by date asc";
 //            String sql="select DATE(createTime) as date, sum(money) as sum from vip_total_income where DATE(createTime) between ? and ? group by DATE(createTime)";
             List<Map<String, Object>> results = jdbcTemplate.queryForList(sql, new Object[]{startDate, endDate});
             return ApiResponse.success(results,"查询成功");
@@ -65,8 +65,8 @@ public class DataCharts {
         if (startDate == "" && endDate == "") return ApiResponse.error(400,"请求参数错误");
 
         try {
-            String sql = "select * from statistic_day_api_amount where date between ? and ?";
-//            String sql="select DATE(requestTime) as date, count(*) as count from stable_diffusion_api where DATE(requestTime) between ? and ? group by DATE(requestTime)";
+            String sql = "select * from statistic_day_api where date between ? and ?  order by date asc";
+            // String sql="select DATE(requestTime) as date, count(*) as count from stable_diffusion_api where DATE(requestTime) between ? and ? group by DATE(requestTime)";
             List<Map<String, Object>> results = jdbcTemplate.queryForList(sql, new Object[]{startDate, endDate});
             return ApiResponse.success(results,"查询成功");
         }catch (DataAccessException e){

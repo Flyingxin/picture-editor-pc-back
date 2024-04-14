@@ -14,12 +14,19 @@ public class ScheduledTasks {
     }
 
 //    @Scheduled(fixedRate = 5000)
-    @Scheduled(cron = "0 45 16 * * ?")
+    @Scheduled(cron = "0 59 23 * * ?")
     public void callApi() {
-        // 调用接口
-        String result = restTemplate.getForObject(
+        // 调用登录注册统计接口
+        String dayAmount = restTemplate.getForObject(
                 GlobalData.IP+GlobalData.API_PREFIX+"/statisticData/dayAmount",
                 String.class);
-        // 处理结果...
+        // 调用vip销售统计接口
+        String dayVip = restTemplate.getForObject(
+                GlobalData.IP+GlobalData.API_PREFIX+"/statisticData/dayVip",
+                String.class);
+        // 调用接口调用接口
+        String dayApi = restTemplate.getForObject(
+                GlobalData.IP+GlobalData.API_PREFIX+"/statisticData/dayApi",
+                String.class);
     }
 }

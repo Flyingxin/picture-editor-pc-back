@@ -18,14 +18,22 @@ import org.springframework.web.filter.CorsFilter;
 public class GlobalWebMvcConfigurer implements WebMvcConfigurer {
     @Override // 不配置，新的资源是不会被解析的，只能重启才能被解析
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        String absoultePath = System.getProperty("user.dir") + GlobalData.RESOUCRCES_PATH;
-        // 融合图片配置
-        registry.addResourceHandler("/diffusionPicture/**")
-                .addResourceLocations("file:" + absoultePath + GlobalData.DIFFUSION_PICTURE_DIRECTORY)
+        String absoultePath = System.getProperty("user.dir") + GlobalData.RESOURCE_PATH;
+        // 风格迁移配置
+        registry.addResourceHandler("/migratePicture/**")
+                .addResourceLocations("file:" + absoultePath + GlobalData.MIGRATE_PICTURE_DIRECTORY)
                 .setCachePeriod(0);
-        // 编辑图片配置
-        registry.addResourceHandler("/editorPicture/**")
-                .addResourceLocations("file:" + absoultePath + GlobalData.EDITOR_PICTURE_DIRECTORY)
+        // 图像增强配置
+        registry.addResourceHandler("/enhancePicture/**")
+                .addResourceLocations("file:" + absoultePath + GlobalData.ENHANCE_PICTURE_DIRECTORY)
+                .setCachePeriod(0);
+        // 项目图标配置
+        registry.addResourceHandler("/icon/**")
+                .addResourceLocations("file:" + absoultePath + GlobalData.ICON_DIRECTORY)
+                .setCachePeriod(0);
+        // AI处理过程图
+        registry.addResourceHandler("/processPicture/**")
+                .addResourceLocations("file:" + absoultePath + "/processPicture/")
                 .setCachePeriod(0);
     }
     /**

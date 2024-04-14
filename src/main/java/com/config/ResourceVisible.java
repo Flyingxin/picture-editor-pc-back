@@ -17,11 +17,10 @@ import java.nio.file.Paths;
 @RestController
 public class ResourceVisible {
 
-    @GetMapping("/api/diffusionPicture/{filename:.+}")
+    @GetMapping("/api/migratePicture/{filename:.+}")
     public ResponseEntity<Resource> serveDuffusionFile(@PathVariable String filename) {
 
-        Path file = Paths.get("diffusionPicture", filename);
-        System.out.println(file);
+        Path file = Paths.get("migratePicture", filename);
         Resource resource = null;
         try {
             resource = new UrlResource(file.toUri());
@@ -32,11 +31,23 @@ public class ResourceVisible {
         return ResponseEntity.ok().body(resource);
     }
 
-    @GetMapping("/api/editorPicture/{filename:.+}")
+    @GetMapping("/api/enhancePicture/{filename:.+}")
     public ResponseEntity<Resource> serveEditorFile(@PathVariable String filename) {
 
-        Path file = Paths.get("editorPicture", filename);
-        System.out.println(file);
+        Path file = Paths.get("enhancePicture", filename);
+        Resource resource = null;
+        try {
+            resource = new UrlResource(file.toUri());
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+
+        return ResponseEntity.ok().body(resource);
+    }
+    @GetMapping("/api/processPicture/{filename:.+}")
+    public ResponseEntity<Resource> serveProcessPictureFile(@PathVariable String filename) {
+
+        Path file = Paths.get("processPicture", filename);
         Resource resource = null;
         try {
             resource = new UrlResource(file.toUri());
