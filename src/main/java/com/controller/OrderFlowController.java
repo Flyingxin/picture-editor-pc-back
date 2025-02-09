@@ -1,6 +1,6 @@
 package com.controller;
 
-import com.common.ApiResponse;
+import com.response.BaseResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -18,14 +18,14 @@ public class OrderFlowController {
 
     // 查询vip_charge_record表的充值记录
     @RequestMapping("/getChargeRecord")
-    public ApiResponse<List<Map<String, Object>>> getChargeRecord() {
+    public BaseResponse<List<Map<String, Object>>> getChargeRecord() {
 
         try {
             String sql = "select * from vip_charge_record";
             List<Map<String, Object>> results = jdbc.queryForList(sql);
-            return ApiResponse.success(results, "查询成功");
+            return BaseResponse.success(results, "查询成功");
         } catch (DataAccessException e) {
-            return ApiResponse.error(500, "服务器崩溃" + e.getMessage());
+            return BaseResponse.fail(500, "服务器崩溃" + e.getMessage());
         }
     }
 

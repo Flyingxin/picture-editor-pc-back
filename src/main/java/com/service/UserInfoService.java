@@ -1,6 +1,6 @@
 package com.service;
 
-import com.common.ApiResponse;
+import com.response.BaseResponse;
 import com.entity.user.UserInfo;
 
 /**
@@ -8,7 +8,7 @@ import com.entity.user.UserInfo;
  */
 public interface UserInfoService {
 
-    ApiResponse<UserInfo> login(String telephone, String password);
+    BaseResponse<UserInfo> login(String telephone, String password);
 
-    ApiResponse<String> register(UserInfo userInfo);
+    BaseResponse<String> register(UserInfo userInfo);
 }

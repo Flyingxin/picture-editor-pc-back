@@ -1,6 +1,6 @@
 package com.controller;
 
-import com.common.ApiResponse;
+import com.response.BaseResponse;
 import com.entity.user.UserInfo;
 import com.entity.user.VipChargeRecord;
 import com.service.UserInfoService;
@@ -36,63 +36,63 @@ public class UserInfoController {
 
     // 查询user-info账户密码登录
     @GetMapping("/login")
-    public ApiResponse<UserInfo> login1(@RequestParam String telephone,@RequestParam String password){
+    public BaseResponse<UserInfo> login1(@RequestParam String telephone, @RequestParam String password){
 
         try {
             return userInfoService.login(telephone, password);
         } catch (DataAccessException e) {
-            return ApiResponse.error(500, "服务器崩溃");
+            return BaseResponse.fail(500, "服务器崩溃");
         }
     }
 
     // 注册用户
     @RequestMapping ("/register")
-    public ApiResponse<String> register(@RequestBody UserInfo data){
+    public BaseResponse<String> register(@RequestBody UserInfo data){
 
         try {
             return userInfoService.register(data);
         } catch (DataAccessException e) {
-            return ApiResponse.error(500, "Database error: " + e.getMessage());
+            return BaseResponse.fail(500, "Database error: " + e.getMessage());
         }
     }
 
     // 根据电话号码查询用户信息
     @RequestMapping("/getUserInfoByTelephone")
-    public ApiResponse<Map<String, Object>> getUserInfoByTelephone(@RequestParam String telephone){
+    public BaseResponse<Map<String, Object>> getUserInfoByTelephone(@RequestParam String telephone){
         if (telephone.isEmpty())
-            return ApiResponse.error(400, "电话号码不能为空");
+            return BaseResponse.fail(400, "电话号码不能为空");
         try {
             String sql="select * from user_info where telephone = ?";
             List<Map<String, Object>> results = jdbc.queryForList(sql, telephone);
-            if (results.isEmpty()) return ApiResponse.error(404, "未查询到用户信息");
-            if (results.size() > 1) return ApiResponse.error(500, "查询到多条用户信息");
+            if (results.isEmpty()) return BaseResponse.fail(404, "未查询到用户信息");
+            if (results.size() > 1) return BaseResponse.fail(500, "查询到多条用户信息");
             Map<String, Object> data = results.get(0);
-            return ApiResponse.success(data,"查询成功");
+            return BaseResponse.success(data,"查询成功");
         } catch (DataAccessException e) {
-            return ApiResponse.error(500, "服务器崩溃" + e.getMessage());
+            return BaseResponse.fail(500, "服务器崩溃" + e.getMessage());
         }
     }
 
     // 根据openId查询用户信息
     @RequestMapping("/getUserInfoByOpenId")
-    public ApiResponse<Map<String, Object>> getUserInfoByOpenId(@RequestParam String openId){
+    public BaseResponse<Map<String, Object>> getUserInfoByOpenId(@RequestParam String openId){
         if (openId.isEmpty())
-            return ApiResponse.error(400, "openId不能为空");
+            return BaseResponse.fail(400, "openId不能为空");
         try {
             String sql="select * from user_info where openId = ?";
             List<Map<String, Object>> results = jdbc.queryForList(sql, openId);
-            if (results.isEmpty()) return ApiResponse.error(404, "未查询到用户信息");
-            if (results.size() > 1) return ApiResponse.error(500, "查询到多条用户信息");
+            if (results.isEmpty()) return BaseResponse.fail(404, "未查询到用户信息");
+            if (results.size() > 1) return BaseResponse.fail(500, "查询到多条用户信息");
             Map<String, Object> data = results.get(0);
-            return ApiResponse.success(data,"查询成功");
+            return BaseResponse.success(data,"查询成功");
         } catch (DataAccessException e) {
-            return ApiResponse.error(500, "服务器崩溃" + e.getMessage());
+            return BaseResponse.fail(500, "服务器崩溃" + e.getMessage());
         }
     }
 
     // 根据openId修改用户信息
     @RequestMapping("/updateUserInfo")
-    public ApiResponse<String> updateUserInfo(@RequestBody UserInfo data){
+    public BaseResponse<String> updateUserInfo(@RequestBody UserInfo data){
         String avatar = data.getAvatar();
         String telephone = data.getTelephone();
         String nickName = data.getNickName();
@@ -105,38 +105,38 @@ public class UserInfoController {
         if(avatar.isEmpty() || nickName.isEmpty() ||
                 telephone.isEmpty() || idCard.isEmpty() || birthday.isEmpty() ||
                 sex.isEmpty() || email.isEmpty() || password.isEmpty() || name.isEmpty())
-            return ApiResponse.error(400, "请求参数错误");
+            return BaseResponse.fail(400, "请求参数错误");
 
         try {
             String sql="update user_info set avatar=?,telephone=?,nickName=?,password=?,name=?,sex=?,idCard=?,birthday=?,email=? where telephone=?";
             jdbc.update(sql, new Object[]{avatar, telephone, nickName, password, name,sex,idCard,birthday, email, telephone});
-            return ApiResponse.success(null,"修改成功");
+            return BaseResponse.success(null,"修改成功");
         } catch (DataAccessException e) {
-            return ApiResponse.error(500, "服务器崩溃" + e.getMessage());
+            return BaseResponse.fail(500, "服务器崩溃" + e.getMessage());
         }
     }
 
 
     // 根据openId查询user_feature_associations获取功能表数据
     @RequestMapping("/getUserFeatureAssociations")
-    public ApiResponse<Map<String, Object>> getUserFeatureAssociations(@RequestParam String openId){
+    public BaseResponse<Map<String, Object>> getUserFeatureAssociations(@RequestParam String openId){
         if (openId.isEmpty())
-            return ApiResponse.error(400, "openId不能为空");
+            return BaseResponse.fail(400, "openId不能为空");
         try {
             String sql="select * from user_feature_associations where openId = ?";
             List<Map<String, Object>> results = jdbc.queryForList(sql, openId);
-            if (results.isEmpty()) return ApiResponse.error(404, "未查询到用户权限信息，请联系管理员");
-            if (results.size() > 1) return ApiResponse.error(500, "查询到多条用户权限信息，请联系管理员");
+            if (results.isEmpty()) return BaseResponse.fail(404, "未查询到用户权限信息，请联系管理员");
+            if (results.size() > 1) return BaseResponse.fail(500, "查询到多条用户权限信息，请联系管理员");
             Map<String, Object> data = results.get(0);
-            return ApiResponse.success(data,"查询成功");
+            return BaseResponse.success(data,"查询成功");
         } catch (DataAccessException e) {
-            return ApiResponse.error(500, "服务器崩溃" + e.getMessage());
+            return BaseResponse.fail(500, "服务器崩溃" + e.getMessage());
         }
     }
 
     // 开通VIP,根据userId查询account_vip_info表如果已经是VIP则续费，但都要给vip_charge_record表添加一条记录
     @RequestMapping("/chargeVip")
-    public ApiResponse<String> chargeVip(@RequestBody VipChargeRecord data) {
+    public BaseResponse<String> chargeVip(@RequestBody VipChargeRecord data) {
         String userVipId = data.getUserVipId();
         String chargeId = data.getChargeId();
         String payTime = data.getPayTime();
@@ -148,7 +148,7 @@ public class UserInfoController {
         int renewDays = data.getRenewDays();
         String operatingUser = data.getOperatingUser();
         if (userVipId.isEmpty() || chargeId.isEmpty() || payTime.isEmpty() || endTime.isEmpty() || price == null || unit.isEmpty() || payType.isEmpty() || operatingUser.isEmpty())
-            return ApiResponse.error(400, "请求参数错误");
+            return BaseResponse.fail(400, "请求参数错误");
 
         String createTime = GenerateString.getCurrentDateTime();
         try {
@@ -166,15 +166,15 @@ public class UserInfoController {
                 sql = "update account_vip_info set endTime=?,gradeScore=? where userVipId=?";
                 jdbc.update(sql, new Object[]{endTime, currentScore, userVipId});
             }else {
-                return ApiResponse.error(500, "系统崩溃");
+                return BaseResponse.fail(500, "系统崩溃");
             }
 
             // 添加一条VIP充值记录
             sql = "insert into vip_charge_record(chargeId,userVipId,payTime,price,unit,score,payType,renewDays,operatingUser) values(?,?,?,?,?,?,?,?,?)";
             jdbc.update(sql, new Object[]{chargeId, userVipId, payTime, price, unit, score, payType, renewDays, operatingUser});
-            return ApiResponse.success(null, "升级成功");
+            return BaseResponse.success(null, "升级成功");
         } catch (DataAccessException e) {
-            return ApiResponse.error(500, "服务器崩溃" + e.getMessage());
+            return BaseResponse.fail(500, "服务器崩溃" + e.getMessage());
         }
     }
 }

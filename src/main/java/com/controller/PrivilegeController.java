@@ -1,6 +1,6 @@
 package com.controller;
 
-import com.common.ApiResponse;
+import com.response.BaseResponse;
 import com.entity.user.AccountVipInfo;
 import com.entity.user.UserInfo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,37 +35,37 @@ public class PrivilegeController {
 
     // 查询VIP
     @RequestMapping("/getUserVip")
-    public ApiResponse<Map<String, Object>> getUserVip(@RequestParam String userVipId) {
+    public BaseResponse<Map<String, Object>> getUserVip(@RequestParam String userVipId) {
         if (userVipId.isEmpty())
-            return ApiResponse.error(400, "请求参数错误");
+            return BaseResponse.fail(400, "请求参数错误");
 
         try {
             String sql = "select * from account_vip_info where userVipId = ?";
             List<Map<String, Object>> results = jdbc.queryForList(sql, userVipId);
-            if (results.isEmpty()) return ApiResponse.error(204, "暂无VIP");
-            if (results.size() > 1) return ApiResponse.error(500, "查询到多条VIP信息");
+            if (results.isEmpty()) return BaseResponse.fail(204, "暂无VIP");
+            if (results.size() > 1) return BaseResponse.fail(500, "查询到多条VIP信息");
             Map<String, Object> data = results.get(0);
 
-            return ApiResponse.success(data, "查询成功");
+            return BaseResponse.success(data, "查询成功");
         } catch (DataAccessException e) {
-            return ApiResponse.error(500, "服务器崩溃" + e.getMessage());
+            return BaseResponse.fail(500, "服务器崩溃" + e.getMessage());
         }
     }
 
     // 续费VIP
     @RequestMapping("/chargeUserVip")
-    public ApiResponse<String> chargeUserVip(@RequestBody AccountVipInfo data) {
+    public BaseResponse<String> chargeUserVip(@RequestBody AccountVipInfo data) {
 //        String openId = data.getOpenId();
         String userVipId = data.getUserVipId();
         String endTime = data.getEndTime();
         String gradeScore = data.getGradeScore();
         if (userVipId.isEmpty() || endTime.isEmpty() || gradeScore.isEmpty())
-            return ApiResponse.error(400, "请求参数错误");
+            return BaseResponse.fail(400, "请求参数错误");
 
         try {
             String sql = "select * from account_vip_info where userVipId = ?";
             List<Map<String, Object>> results = jdbc.query(sql, new Object[]{userVipId}, new ColumnMapRowMapper());
-            if (results.isEmpty()) return ApiResponse.error(404, "账号不存在，请先注册");
+            if (results.isEmpty()) return BaseResponse.fail(404, "账号不存在，请先注册");
             if (results.size() == 1) {
                 Map<String, Object> vipInfo = results.get(0);
                 int originScore = (int) vipInfo.get("gradeScore");
@@ -73,42 +73,42 @@ public class PrivilegeController {
                 sql = "update account_vip_info set endTime=?,gradeScore=? where userVipId=?";
                 jdbc.update(sql, new Object[]{endTime, currentScore, userVipId});
             } else {
-                return ApiResponse.error(404, "查询到多条VIP信息");
+                return BaseResponse.fail(404, "查询到多条VIP信息");
             }
-            return ApiResponse.success(null, "续费成功");
+            return BaseResponse.success(null, "续费成功");
         } catch (DataAccessException e) {
-            return ApiResponse.error(500, "服务器崩溃" + e.getMessage());
+            return BaseResponse.fail(500, "服务器崩溃" + e.getMessage());
         }
     }
 
     // 关闭VIP
     @RequestMapping("/closeVip")
-    public ApiResponse<String> closeVip(@RequestParam String userVipId) {
+    public BaseResponse<String> closeVip(@RequestParam String userVipId) {
         if (userVipId.isEmpty())
-            return ApiResponse.error(400, "请求参数错误");
+            return BaseResponse.fail(400, "请求参数错误");
 
         try {
             String sql = "delete from account_vip_info where userVipId=?";
             jdbc.update(sql, new Object[]{userVipId});
-            return ApiResponse.success(null, "关闭改用户VIP成功");
+            return BaseResponse.success(null, "关闭改用户VIP成功");
         } catch (Exception e) {
-            return ApiResponse.error(500, "服务器崩溃");
+            return BaseResponse.fail(500, "服务器崩溃");
         }
     }
 
     // 修改用户权限
     @RequestMapping("/updateUserPrivilege")
-    public ApiResponse<String> updateUserPrivilege(@RequestBody UserInfo data) {
+    public BaseResponse<String> updateUserPrivilege(@RequestBody UserInfo data) {
         String openId = data.getOpenId();
         String identity = data.getIdentity();
         if (openId.isEmpty() || identity.isEmpty())
-            return ApiResponse.error(400, "请先查询用户信息");
+            return BaseResponse.fail(400, "请先查询用户信息");
         try {
             String sql = "update user_info set identity=? where openId=?";
             jdbc.update(sql, new Object[]{identity, openId});
-            return ApiResponse.success(null, "成功修改为" + identity);
+            return BaseResponse.success(null, "成功修改为" + identity);
         } catch (DataAccessException e) {
-            return ApiResponse.error(500, "服务器崩溃" + e.getMessage());
+            return BaseResponse.fail(500, "服务器崩溃" + e.getMessage());
         }
     }
 

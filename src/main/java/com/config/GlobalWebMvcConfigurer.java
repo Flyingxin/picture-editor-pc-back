@@ -1,6 +1,6 @@
 package com.config;
 
-import com.constant.GlobalData;
+import com.constant.GlobalConstant;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestTemplate;
@@ -16,18 +16,18 @@ import org.springframework.web.filter.CorsFilter;
 public class GlobalWebMvcConfigurer implements WebMvcConfigurer {
     @Override // 不配置，新的资源是不会被解析的，只能重启才能被解析
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        String absoultePath = System.getProperty("user.dir") + GlobalData.RESOURCE_PATH;
+        String absoultePath = System.getProperty("user.dir") + GlobalConstant.RESOURCE_PATH;
         // 风格迁移配置
         registry.addResourceHandler("/migratePicture/**")
-                .addResourceLocations("file:" + absoultePath + GlobalData.MIGRATE_PICTURE_DIRECTORY)
+                .addResourceLocations("file:" + absoultePath + GlobalConstant.MIGRATE_PICTURE_DIRECTORY)
                 .setCachePeriod(0);
         // 图像增强配置
         registry.addResourceHandler("/enhancePicture/**")
-                .addResourceLocations("file:" + absoultePath + GlobalData.ENHANCE_PICTURE_DIRECTORY)
+                .addResourceLocations("file:" + absoultePath + GlobalConstant.ENHANCE_PICTURE_DIRECTORY)
                 .setCachePeriod(0);
         // 项目图标配置
         registry.addResourceHandler("/icon/**")
-                .addResourceLocations("file:" + absoultePath + GlobalData.ICON_DIRECTORY)
+                .addResourceLocations("file:" + absoultePath + GlobalConstant.ICON_DIRECTORY)
                 .setCachePeriod(0);
         // AI处理过程图
         registry.addResourceHandler("/processPicture/**")

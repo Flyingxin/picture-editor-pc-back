@@ -38,4 +38,6 @@ public class UserInfo implements Serializable {
 
     private String lastLoginTime;
 
+    private String token;
+
 }

@@ -1,6 +1,9 @@
 package com.service.impl;
 
-import com.common.ApiResponse;
+import com.dto.CommonAuthInfoDto;
+import com.entity.user.AccountFroze;
+import com.utils.jwt.JwtUtil;
+import com.response.BaseResponse;
 import com.dao.user.AccountFrozeDao;
 import com.dao.user.UserFeatureAssociationsDao;
 import com.dao.user.UserInfoDao;
@@ -30,45 +33,55 @@ public class UserInfoServiceImpl implements UserInfoService {
     private UserFeatureAssociationsDao userFeatureAssociationsDao;
 
     @Override
-    public ApiResponse<UserInfo> login(String telephone, String password) {
+    public BaseResponse<UserInfo> login(String telephone, String password) {
 
         UserInfo userInfo = userInfoDao.queryUser(telephone);
         if (userInfo.getId().isEmpty()) {
-            return ApiResponse.error(204, "账号不存在，请先注册");
+            return BaseResponse.fail(204, "账号不存在，请先注册");
         }
 
         if (!password.equals(userInfo.getPassword()))  {
-            return ApiResponse.error(204, "账号或密码错误");
+            return BaseResponse.fail(204, "账号或密码错误");
         }
 
-//        AccountFroze frozeInfo = accountFrozeDao.queryUserForFroze(userInfo.getFrozeId());
+        AccountFroze frozeInfo = accountFrozeDao.queryUserForFroze(userInfo.getFrozeId());
 
         // 当前时间与冻结时间
         LocalDateTime currentDateTime = Date.stringToLocalDateTime(Date.getCurrentDateTime());
-//        LocalDateTime frozeEndTime = Date.stringToLocalDateTime(frozeInfo.getEndTime());
-//        if (frozeEndTime.isBefore(currentDateTime)) {
-//            return ApiResponse.error(204, "账号已被封禁");
-//        }
+        if(frozeInfo != null) {
+            LocalDateTime frozeEndTime = Date.stringToLocalDateTime(frozeInfo.getEndTime());
+            if (frozeEndTime.isBefore(currentDateTime)) {
+                return BaseResponse.fail(204, "账号已被封禁");
+            }
+        }
+        // token
+        CommonAuthInfoDto authInfo = new CommonAuthInfoDto();
+        authInfo.setApp("pictureEditor");
+        authInfo.setUserId(userInfo.getOpenId());
+        authInfo.setNick(userInfo.getNickName());
+        authInfo.setRole("user");
+        String token = JwtUtil.commonGenerateToken(authInfo);
+        userInfo.setToken(token);
 
         // 修改最新登录时间
         userInfoDao.freshLoginTime(userInfo.getOpenId(), currentDateTime);
 
-        return ApiResponse.success(userInfo, "成功");
+        return BaseResponse.success(userInfo, "成功");
     }
 
     @Override
-    public ApiResponse<String> register(UserInfo userInfo) {
+    public BaseResponse<String> register(UserInfo userInfo) {
         String openId = userInfo.getOpenId();
         String telephone = userInfo.getTelephone();
         String password = userInfo.getPassword();
         String nickName = userInfo.getNickName();
         if (openId.isEmpty() || telephone.isEmpty() || password.isEmpty() || nickName.isEmpty()) {
-            return ApiResponse.error(400, "请填写完整的信息");
+            return BaseResponse.fail(400, "请填写完整的信息");
         }
 
         UserInfo data = userInfoDao.queryUser(telephone);
         if (data != null) {
-            return ApiResponse.error(204, "账号已存在");
+            return BaseResponse.fail(204, "账号已存在");
         }
 
         // 添加用户功能映射id
@@ -85,6 +98,6 @@ public class UserInfoServiceImpl implements UserInfoService {
         userInfo.setAvatar(avatar);
         int id = userInfoDao.addUser(userInfo);
 
-        return ApiResponse.success(id + "","注册成功");
+        return BaseResponse.success(id + "","注册成功");
     }
 }

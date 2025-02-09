@@ -1,6 +1,6 @@
 package com.controller;
 
-import com.constant.GlobalData;
+import com.constant.GlobalConstant;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
@@ -18,15 +18,15 @@ public class ScheduledTasksController {
     public void callApi() {
         // 调用登录注册统计接口
         String dayAmount = restTemplate.getForObject(
-                GlobalData.IP+GlobalData.API_PREFIX+"/statisticData/dayAmount",
+                GlobalConstant.IP+ GlobalConstant.API_PREFIX+"/statisticData/dayAmount",
                 String.class);
         // 调用vip销售统计接口
         String dayVip = restTemplate.getForObject(
-                GlobalData.IP+GlobalData.API_PREFIX+"/statisticData/dayVip",
+                GlobalConstant.IP+ GlobalConstant.API_PREFIX+"/statisticData/dayVip",
                 String.class);
         // 调用接口调用接口
         String dayApi = restTemplate.getForObject(
-                GlobalData.IP+GlobalData.API_PREFIX+"/statisticData/dayApi",
+                GlobalConstant.IP+ GlobalConstant.API_PREFIX+"/statisticData/dayApi",
                 String.class);
     }
 }

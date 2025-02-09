@@ -18,7 +18,7 @@ import java.nio.file.Paths;
 public class ResourceVisible {
 
     @GetMapping("/api/migratePicture/{filename:.+}")
-    public ResponseEntity<Resource> serveDuffusionFile(@PathVariable String filename) {
+    public ResponseEntity<Resource> serveDiffusionFile(@PathVariable String filename) {
 
         Path file = Paths.get("migratePicture", filename);
         Resource resource = null;

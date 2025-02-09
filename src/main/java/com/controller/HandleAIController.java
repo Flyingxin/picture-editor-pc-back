@@ -1,6 +1,6 @@
 package com.controller;
 
-import com.common.ApiResponse;
+import com.response.BaseResponse;
 import com.entity.user.UserApi;
 import com.utils.GenerateString;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +18,7 @@ public class HandleAIController {
 
     // 记录AI接口调用成功与失败数
     @RequestMapping("/recordAiApi")
-    public ApiResponse<String> recordAiApi(@RequestBody UserApi data){
+    public BaseResponse<String> recordAiApi(@RequestBody UserApi data){
         String apiId = data.getApiId();
         String userApiId = data.getUserApiId();
         String apiName = data.getApiName();
@@ -30,9 +30,9 @@ public class HandleAIController {
         try {
             String sql = "INSERT INTO user_api (apiId, userApiId, apiName, requestTime, status, statusCode, reason) VALUES (?, ?, ?, ?, ?, ?, ?)";
             jdbc.update(sql, apiId, userApiId, apiName, requestTime, status, statusCode, reason);
-            return ApiResponse.success(null, "记录成功");
+            return BaseResponse.success(null, "记录成功");
         } catch (DataAccessException  e) {
-            return ApiResponse.error(500, "服务器崩溃" + e.getMessage());
+            return BaseResponse.fail(500, "服务器崩溃" + e.getMessage());
         }
     }
 }

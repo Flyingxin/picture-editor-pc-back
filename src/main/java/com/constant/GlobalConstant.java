@@ -1,6 +1,6 @@
 package com.constant;
 
-public class GlobalData {
+public class GlobalConstant {
     // 接口IP地址
     public static final String IP = "http://localhost:9000";
     // 接口前缀

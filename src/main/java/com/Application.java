@@ -1,6 +1,5 @@
 package com;
 
-import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -10,13 +9,12 @@ import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
 import org.springframework.context.annotation.Bean;
 //import org.mybatis.spring.annotation.MapperScan;
 
-import com.jwt.JwtAuthenticationFilter;
+import com.utils.jwt.JwtFilter;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 // 入口
 @SpringBootApplication // 主程序类 ,是组合注解
 @EnableScheduling // 定时任务
-@MapperScan("com.dao.user")
 public class Application extends SpringBootServletInitializer{
     // 启动
     public static void main(String[] args) {
@@ -49,7 +47,7 @@ public class Application extends SpringBootServletInitializer{
     @Bean
     public FilterRegistrationBean jwtFilter() {
         final FilterRegistrationBean registrationBean = new FilterRegistrationBean();
-        JwtAuthenticationFilter filter = new JwtAuthenticationFilter();
+        JwtFilter filter = new JwtFilter();
         registrationBean.setFilter(filter);
         return registrationBean;
     }
