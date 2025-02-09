@@ -1,8 +1,6 @@
 package com.config;
 
-import com.common.GlobalData;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
+import com.constant.GlobalData;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestTemplate;
@@ -36,6 +34,7 @@ public class GlobalWebMvcConfigurer implements WebMvcConfigurer {
                 .addResourceLocations("file:" + absoultePath + "/processPicture/")
                 .setCachePeriod(0);
     }
+
     /**
      * 跨域
      */
@@ -50,12 +49,12 @@ public class GlobalWebMvcConfigurer implements WebMvcConfigurer {
     }
 
     /**
-     * @Bean 返回一个对象，这个对象应该被注册为 Spring 应用上下文中的一个 Bean。
+     * @ Bean 返回一个对象，这个对象应该被注册为 Spring 应用上下文中的一个 Bean。
      */
     @Bean
     public CorsFilter corsFilter() {
         CorsConfiguration config = new CorsConfiguration();// 允许跨越发送cookie
-        config.addAllowedOrigin("http://127.0.0.1:5173");// 放行全部原始头信息
+        config.addAllowedOrigin("http://localhost:5173");// 放行全部原始头信息
         config.setAllowCredentials(true);// 允许所有域名进行跨域调用
         config.addAllowedHeader("*");// 允许所有请求方法跨域调用
         config.addAllowedMethod("*");// 基于URL的跨域配置源

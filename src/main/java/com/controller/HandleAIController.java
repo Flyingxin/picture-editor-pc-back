@@ -1,27 +1,24 @@
 package com.controller;
 
 import com.common.ApiResponse;
-import com.model.dto.user.UserApiDTO;
+import com.entity.user.UserApi;
 import com.utils.GenerateString;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.Map;
 
 @RestController
 @RequestMapping("/handleAI")
-public class HandleAI {
+public class HandleAIController {
     @Autowired
     JdbcTemplate jdbc;
 
     // 记录AI接口调用成功与失败数
     @RequestMapping("/recordAiApi")
-    public ApiResponse<String> recordAiApi(@RequestBody UserApiDTO data){
+    public ApiResponse<String> recordAiApi(@RequestBody UserApi data){
         String apiId = data.getApiId();
         String userApiId = data.getUserApiId();
         String apiName = data.getApiName();

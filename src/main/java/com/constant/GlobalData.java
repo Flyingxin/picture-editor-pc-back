@@ -1,9 +1,9 @@
-package com.common;
+package com.constant;
 
 public class GlobalData {
     // 接口IP地址
     public static final String IP = "http://localhost:9000";
-    //  接口前缀
+    // 接口前缀
     public static final String API_PREFIX = "/api";
     // 资源路径
     public static final String RESOURCE_PATH = "/src/main/resources/static";

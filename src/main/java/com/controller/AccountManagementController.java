@@ -1,8 +1,8 @@
 package com.controller;
 
 import com.common.ApiResponse;
-import com.model.dto.user.AccountFrozeDTO;
-import com.model.dto.user.UserInfoDTO;
+import com.entity.user.AccountFroze;
+import com.entity.user.UserInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.ColumnMapRowMapper;
@@ -14,7 +14,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/accountManagement")
-public class AccountManagement {
+public class AccountManagementController {
     @Autowired
     JdbcTemplate jdbc;
 
@@ -22,13 +22,13 @@ public class AccountManagement {
     // 且数据库还可以扩展为，字段isBan添加到user_info中用来登录判断（有则查account_ban符合的记录放回），account_ban表允许openId有多条记录，用来后台行为分析
     // 利用frozeId,先查询account_ban表有数据就修改，没数据就插入
     @RequestMapping("/frozeUser")
-    public ApiResponse<String> frozeUser(@RequestBody AccountFrozeDTO data){
+    public ApiResponse<String> frozeUser(@RequestBody AccountFroze data){
         String frozeId = data.getFrozeId();
         String frozeType = data.getFrozeType();
         String frozeReason = data.getFrozeReason();
         String startTime = data.getStartTime();
         String endTime = data.getEndTime();
-        if (frozeId == "" || frozeType == "" || frozeReason == "" || startTime == "" || endTime == "")
+        if (frozeId.isEmpty() || frozeType.isEmpty() || frozeReason.isEmpty() || startTime.isEmpty() || endTime.isEmpty())
             return ApiResponse.error(400,"请求参数错误");
 
         try {
@@ -52,12 +52,12 @@ public class AccountManagement {
 
     // 查询账号封禁
     @GetMapping("/getBanUser")
-    public ApiResponse<Map<String, Object>> getBanUser(@RequestParam String openId) {
-        if (openId == "")
+    public ApiResponse<Map<String, Object>> getBanUser(@RequestParam String frozeId) {
+        if (frozeId == "")
             return ApiResponse.error(400, "请求参数错误");
         try {
-            String sql="select * from account_ban where openId = ?";
-            List<Map<String, Object>> results = jdbc.queryForList(sql, openId);
+            String sql="select * from account_froze where frozeId = ?";
+            List<Map<String, Object>> results = jdbc.queryForList(sql, frozeId);
             if (results.isEmpty()) return ApiResponse.error( 404,"该账户无不良信息");
             if (results.size() > 1) return ApiResponse.error(500, "查询到多条封禁信息");
             Map<String, Object> data = results.get(0);
@@ -69,7 +69,7 @@ public class AccountManagement {
 
     // 修改用户系统权限
     @RequestMapping("/updateIsManager")
-    public ApiResponse<String> updateIsManager(@RequestBody UserInfoDTO data){
+    public ApiResponse<String> updateIsManager(@RequestBody UserInfo data){
         String openId = data.getOpenId();
         String identity = data.getIdentity();
         if (openId == "")

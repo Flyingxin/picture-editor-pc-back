@@ -2,14 +2,8 @@ package com.utils;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.UUID;
 
-public class GenerateString {
-    // 生成UUid
-    public static String generateUUID(int num) {
-        UUID uuid = UUID.randomUUID();
-        return uuid.toString().substring(0, num);
-    }
+public class Date {
 
     // 生成当前创建时间
     public static String getCurrentDateTime() {
@@ -17,5 +11,13 @@ public class GenerateString {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         return now.format(formatter);
     }
+
+    public static LocalDateTime stringToLocalDateTime(String dateTimeString){
+        // 定义日期时间格式
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        // 将字符串转换为 LocalDateTime
+        return LocalDateTime.parse(dateTimeString, formatter);
+    }
+
 
 }

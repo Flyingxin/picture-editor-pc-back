@@ -1,5 +1,5 @@
 package com.jwt;
-import com.common.GlobalData;
+import com.constant.GlobalData;
 
 import org.springframework.util.AntPathMatcher; //
 import org.springframework.util.PathMatcher; // 用于匹配 URL 路径的工具类
@@ -50,11 +50,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     /***
      * 不受保护的 API URL 映射列表
-     * @param request
-     * @return
+     * @return boolean
      */
     private boolean isProtectedUrl(HttpServletRequest request) {
-        List<String> protectedPaths = new ArrayList<String>();
+        List<String> protectedPaths = new ArrayList<>();
 //        protectedPaths.add("/api/user/login");
 //        protectedPaths.add("/api/user/register");
 

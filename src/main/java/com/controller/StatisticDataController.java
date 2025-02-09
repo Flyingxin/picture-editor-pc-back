@@ -3,15 +3,12 @@ package com.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Map;
-
 @RestController
 @RequestMapping("/statisticData")
-public class StatisticData {
+public class StatisticDataController {
     @Autowired
     JdbcTemplate jdbc;
 
@@ -48,7 +45,8 @@ public class StatisticData {
             // 查询每日vip购买次数
             String vipBuyAmountSql = "SELECT COUNT(*) FROM vip_charge_record WHERE DATE(payTime) = CURDATE()";
             Integer vipBuyAmount = jdbc.queryForObject(vipBuyAmountSql, Integer.class);
-
+            System.out.println(vipBuyAmount);
+            System.out.println(vipIncome);
             // 每日vip总收入和购买次数加上今日日期插入statistic_day_vip表中
             String insertSql = "INSERT INTO statistic_day_vip (date, totalPrice, totalPurchase) VALUES (CURDATE(), ?, ?)";
             jdbc.update(insertSql, vipIncome, vipBuyAmount);

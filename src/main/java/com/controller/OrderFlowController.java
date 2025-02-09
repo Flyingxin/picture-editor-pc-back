@@ -12,7 +12,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/orderFlow")
-public class OrderFlow {
+public class OrderFlowController {
     @Autowired
     JdbcTemplate jdbc;
 

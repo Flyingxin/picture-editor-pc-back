@@ -1,7 +1,7 @@
 package com.controller;
 import com.common.ApiResponse;
-import com.common.GlobalData;
-import com.model.dto.user.UserPictureDTO;
+import com.constant.GlobalData;
+import com.entity.user.UserPicture;
 import com.utils.GenerateString;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,28 +25,28 @@ import java.util.Map;
  * 5. 替换图片
  * 7. 获取图片列表
  * @author ccyx
- * @date 2024/3/8
- * @description 接口测试完毕、
- * @defect 未接入日志系统
+ * date 2024/3/8
+ * description 接口测试完毕、
+ * defect 未接入日志系统
  * */
 
 @RestController
 @RequestMapping("/imageManagement")
-public class ImageManagement {
+public class ImageManagementController {
     @Autowired
     JdbcTemplate jdbc;
     String API_PREFIX = GlobalData.API_PREFIX;
 
     // 图片上传(base64)
     @RequestMapping("/addUserPicture")
-    public ApiResponse<String> addUserPicture(@RequestBody UserPictureDTO data) {
+    public ApiResponse<String> addUserPicture(@RequestBody UserPicture data) {
         String base64String = data.getPictureUrl();
         String userPictureId = data.getUserPictureId();
         String pictureId = data.getPictureId();
         String updateTime = data.getUpdateTime();
         String pictureType = data.getPictureType();
         String pictureSuffix = data.getPictureSuffix();
-        if (base64String == "" || userPictureId == "" || updateTime == "" || pictureType == "" || pictureId == "" || pictureSuffix == "") {
+        if (base64String.isEmpty() || userPictureId.isEmpty() || updateTime.isEmpty() || pictureType.isEmpty() || pictureId.isEmpty() || pictureSuffix.isEmpty()) {
             return ApiResponse.error(400, "请求参数错误");
         }
         String pictureDirectory;
@@ -89,7 +89,7 @@ public class ImageManagement {
 
     // 删除图片
     @RequestMapping("/delUserPicture")
-    public ApiResponse<String> deleteUserPicture(@RequestBody UserPictureDTO data){
+    public ApiResponse<String> deleteUserPicture(@RequestBody UserPicture data){
         String pictureId = data.getPictureId();
         String pictureUrl = data.getPictureUrl();
         String pictureType = data.getPictureType();
@@ -128,18 +128,18 @@ public class ImageManagement {
 
     // 替换图片
     @RequestMapping ("/updateUserPicture")
-    public ApiResponse<String> updateUserPicture(@RequestBody UserPictureDTO data){
+    public ApiResponse<String> updateUserPicture(@RequestBody UserPicture data){
         String userPictureId = data.getPictureId();
         String pictureId = data.getPictureId();
         String base64String = data.getPictureUrl();
         String updateTime = data.getUpdateTime();
-        if (userPictureId == "" || pictureId == "" || base64String == "" || updateTime == "")
+        if (userPictureId.isEmpty() || pictureId .isEmpty() || base64String.isEmpty() || updateTime.isEmpty())
             return ApiResponse.error(400,"请求参数错误");
 
         String picturePath = System.getProperty("user.dir") + GlobalData.RESOURCE_PATH;
         String pictureDirectory = GlobalData.MIGRATE_PICTURE_DIRECTORY;
         String pictureName = pictureId + ".png" ;
-        String pictureUrl =  GlobalData.IP + API_PREFIX + pictureDirectory + pictureName;
+//        String pictureUrl =  GlobalData.IP + API_PREFIX + pictureDirectory + pictureName;
         try {
             // 查询图片并删除图片
             File file = new File(picturePath + pictureDirectory + pictureName);
@@ -168,7 +168,7 @@ public class ImageManagement {
             @RequestParam Integer page,
             @RequestParam Integer size
     ) {
-        if (userPictureId == "" || page == null || size == null || pictureType == "")
+        if (userPictureId.isEmpty() || page == null || size == null || pictureType.isEmpty())
             return ApiResponse.error(400,"请求参数错误");
 
         try {
@@ -193,13 +193,13 @@ public class ImageManagement {
 
     // 图片上传(base64)
     @RequestMapping("/storagePictureAI")
-    public ApiResponse<String> storagePictureAI(@RequestBody UserPictureDTO data) {
+    public ApiResponse<String> storagePictureAI(@RequestBody UserPicture data) {
         String base64String = data.getPictureUrl();
         String userPictureId = data.getUserPictureId();
         String pictureId = data.getPictureId();
         String pictureType = data.getPictureType();
         String pictureSuffix = data.getPictureSuffix();
-        if (base64String == "" || userPictureId == "" || pictureType == "" || pictureId == "" || pictureSuffix == "") {
+        if (base64String.isEmpty() || userPictureId.isEmpty() || pictureType.isEmpty() || pictureId.isEmpty() || pictureSuffix.isEmpty()) {
             return ApiResponse.error(400, "请求参数错误");
         }
 
