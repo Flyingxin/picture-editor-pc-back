@@ -21,7 +21,8 @@ mybatis-plus:
   type-aliases-package: com.entity
   global-config:
     db-config:
-      id-type: auto # 主键策略
+      id-type: auto # 主键策略:
+#     naming-strategy: camelCase  #驼峰、 默认数据库为_
 
 
 # 使用还需接口依赖相关注释

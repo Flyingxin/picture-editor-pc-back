@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.entity.user.AccountFroze;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -18,5 +19,4 @@ public interface AccountFrozeMapper extends BaseMapper<AccountFroze> {
     // 查询用户是否封禁
     AccountFroze queryUserForFroze(@Param("frozeId") String frozeId);
 
-//    AccountFroze searchByFrozeId(String frozeId);
 }

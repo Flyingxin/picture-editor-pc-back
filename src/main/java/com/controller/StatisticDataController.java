@@ -18,11 +18,11 @@ public class StatisticDataController {
 
         try {
             // 查询每日登录数据量
-            String loginAmountSql = "SELECT COUNT(*) FROM user_info WHERE DATE(lastLoginTime) = CURDATE()";
+            String loginAmountSql = "SELECT COUNT(*) FROM user_info WHERE DATE(last_login_time) = CURDATE()";
             Integer loginAmount = jdbc.queryForObject(loginAmountSql, Integer.class);
 
             // 查询每日注册数据量
-            String registerAmountSql = "SELECT COUNT(*) FROM user_info WHERE DATE(createTime) = CURDATE()";
+            String registerAmountSql = "SELECT COUNT(*) FROM user_info WHERE DATE(last_login_time) = CURDATE()";
             Integer registerAmount = jdbc.queryForObject(registerAmountSql, Integer.class);
 
             // 每日注册数据量和每日登录数量加上今日日期插入statistic_day_amount表中

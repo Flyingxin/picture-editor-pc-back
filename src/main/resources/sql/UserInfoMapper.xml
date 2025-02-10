@@ -4,20 +4,20 @@
 
     <resultMap type="com.entity.user.UserInfo" id="UserInfoMap">
         <result property="id" column="id" jdbcType="INTEGER"/>
-        <result property="openId" column="openId" jdbcType="VARCHAR"/>
+        <result property="openId" column="open_id" jdbcType="VARCHAR"/>
         <result property="avatar" column="avatar" jdbcType="VARCHAR"/>
         <result property="telephone" column="telephone" jdbcType="VARCHAR"/>
         <result property="frozeId" column="frozeId" jdbcType="VARCHAR"/>
-        <result property="nickName" column="nickName" jdbcType="VARCHAR"/>
+        <result property="nickName" column="nick_name" jdbcType="VARCHAR"/>
         <result property="password" column="password" jdbcType="VARCHAR"/>
         <result property="birthday" column="birthday" jdbcType="DATE"/>
         <result property="identity" column="identity" jdbcType="VARCHAR"/>
         <result property="name" column="name" jdbcType="VARCHAR"/>
         <result property="sex" column="sex" jdbcType="VARCHAR"/>
         <result property="email" column="email" jdbcType="VARCHAR"/>
-        <result property="idCard" column="idCard" jdbcType="VARCHAR"/>
-        <result property="createTime" column="createTime" jdbcType="DATE"/>
-        <result property="lastLoginTime" column="lastLoginTime" jdbcType="DATE"/>
+        <result property="idCard" column="id_card" jdbcType="VARCHAR"/>
+        <result property="createTime" column="create_time" jdbcType="DATE"/>
+        <result property="lastLoginTime" column="last_login_time" jdbcType="DATE"/>
     </resultMap>
 
 
@@ -51,13 +51,13 @@
     <!--更新用户登录时间-->
     <update id="freshLoginTime">
         UPDATE `picture-editor`.`user_info`
-        SET lastLoginTime = #{lastLoginTime}
-        WHERE openId = #{openId}
+        SET last_login_time = #{lastLoginTime}
+        WHERE open_id = #{openId}
     </update>
 
-    <insert id="addUser"  useGeneratedKeys="true" parameterType="com.entity.user.UserInfo">
+    <insert id="addUser" keyProperty="id"  useGeneratedKeys="true" parameterType="com.entity.user.UserInfo">
         INSERT INTO `picture-editor`.`user_info`
-            (openId,avatar,telephone,password,nickName,createTime,frozeId)
+            (open_id,avatar,telephone,password,nick_name,create_time,froze_id)
         VALUES
             (#{openId}, #{avatar}, #{telephone}, #{password}, #{nickName}, #{createTime}, #{frozeId});
     </insert>

@@ -70,7 +70,7 @@ public class JwtUtil {
 //    }
 
     // DTO转map
-    private static Map<String, Object> convertToMap(Object dto) {
+    public static Map<String, Object> convertToMap(Object dto) {
         Map<String, Object> map = new HashMap<>();
         Field[] fields = dto.getClass().getDeclaredFields();
 

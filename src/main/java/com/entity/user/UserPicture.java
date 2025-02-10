@@ -2,16 +2,10 @@ package com.entity.user;
 
 import lombok.Data;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
 import java.io.Serializable;
 
 @Data
-@Entity
-@Table(name = "account_froze")
 public class UserPicture implements Serializable {
-    @Id
     private String id;
     private String userPictureId;
     private String pictureId;

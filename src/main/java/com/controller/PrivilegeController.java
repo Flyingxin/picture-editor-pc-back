@@ -104,7 +104,7 @@ public class PrivilegeController {
         if (openId.isEmpty() || identity.isEmpty())
             return BaseResponse.fail(400, "请先查询用户信息");
         try {
-            String sql = "update user_info set identity=? where openId=?";
+            String sql = "update user_info set identity=? where open_id=?";
             jdbc.update(sql, new Object[]{identity, openId});
             return BaseResponse.success(null, "成功修改为" + identity);
         } catch (DataAccessException e) {

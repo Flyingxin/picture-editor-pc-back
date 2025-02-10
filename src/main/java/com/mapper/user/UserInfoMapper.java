@@ -7,7 +7,6 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
-
 /**
  * (user_info)表数据库访问层
  * author ccyx
@@ -21,7 +20,7 @@ public interface UserInfoMapper extends BaseMapper<UserInfo> {
     UserInfo queryUser(@Param("telephone") String telephone);
 
     // 更新用户登录时间
-    Boolean freshLoginTime(
+    void freshLoginTime(
             @Param("openId") String openId,
             @Param("lastLoginTime") LocalDateTime lastLoginTime
     );

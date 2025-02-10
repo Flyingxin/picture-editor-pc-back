@@ -36,7 +36,7 @@ public class UserInfoController {
 
     // 查询user-info账户密码登录
     @GetMapping("/login")
-    public BaseResponse<UserInfo> login1(@RequestParam String telephone, @RequestParam String password){
+    public BaseResponse<UserInfo> login(@RequestParam String telephone, @RequestParam String password){
 
         try {
             return userInfoService.login(telephone, password);
@@ -79,7 +79,7 @@ public class UserInfoController {
         if (openId.isEmpty())
             return BaseResponse.fail(400, "openId不能为空");
         try {
-            String sql="select * from user_info where openId = ?";
+            String sql="select * from user_info where open_id = ?";
             List<Map<String, Object>> results = jdbc.queryForList(sql, openId);
             if (results.isEmpty()) return BaseResponse.fail(404, "未查询到用户信息");
             if (results.size() > 1) return BaseResponse.fail(500, "查询到多条用户信息");
@@ -108,7 +108,7 @@ public class UserInfoController {
             return BaseResponse.fail(400, "请求参数错误");
 
         try {
-            String sql="update user_info set avatar=?,telephone=?,nickName=?,password=?,name=?,sex=?,idCard=?,birthday=?,email=? where telephone=?";
+            String sql="update user_info set avatar=?,telephone=?,nick_name=?,password=?,name=?,sex=?,id_card=?,birthday=?,email=? where telephone=?";
             jdbc.update(sql, new Object[]{avatar, telephone, nickName, password, name,sex,idCard,birthday, email, telephone});
             return BaseResponse.success(null,"修改成功");
         } catch (DataAccessException e) {

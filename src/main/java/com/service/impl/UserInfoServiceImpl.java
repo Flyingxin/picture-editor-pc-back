@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import com.utils.Date;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 import com.utils.GenerateString;
 
@@ -36,7 +37,7 @@ public class UserInfoServiceImpl implements UserInfoService {
     public BaseResponse<UserInfo> login(String telephone, String password) {
 
         UserInfo userInfo = userInfoMapper.queryUser(telephone);
-        if (userInfo.getId().isEmpty()) {
+        if (userInfo.getId() == null) {
             return BaseResponse.fail(204, "账号不存在，请先注册");
         }
 
@@ -61,12 +62,11 @@ public class UserInfoServiceImpl implements UserInfoService {
         authInfo.setNick(userInfo.getNickName());
         authInfo.setRole("user");
         String token = JwtUtil.commonGenerateToken(authInfo);
-        userInfo.setToken(token);
 
         // 修改最新登录时间
         userInfoMapper.freshLoginTime(userInfo.getOpenId(), currentDateTime);
 
-        return BaseResponse.success(userInfo, "成功");
+        return BaseResponse.success(userInfo, "成功", token);
     }
 
     @Override

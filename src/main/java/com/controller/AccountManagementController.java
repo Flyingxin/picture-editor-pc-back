@@ -76,7 +76,7 @@ public class AccountManagementController {
             return BaseResponse.fail(400, "请求参数错误");
 
         try {
-            String sql="update user_info set identity=? where openId=?";
+            String sql="update user_info set identity=? where open_id=?";
             jdbc.update(sql, new Object[]{identity, openId});
             return BaseResponse.success(null,"Permission changed to "+identity);
         } catch (DataAccessException e) {

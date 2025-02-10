@@ -61,3 +61,38 @@ Spring Boot在启动时会扫描静态资源目录，并将这些资源加载到
                 .setCachePeriod(0);
     }
 ```
+
+```
+触发器，当记录发生改动时，update_time字段自动更新
+开启触发器
+CREATE TRIGGER update_timestamp
+BEFORE UPDATE ON user_info（指定表）
+FOR EACH ROW
+BEGIN
+    SET NEW.update_time = NOW();
+END;
+
+关闭触发器
+DROP TRIGGER IF EXISTS update_timestamp;
+```
+
+```
+操作数据库演变:  jdbc -> mybatis -> mybatis-plus 或 JPA
+```
+
+
+```azure
+1. 看懂代码规范,了解数据层次
+2. 学会junit单元测试、会调用接口，并把接收很多个的参数封装再request中
+3. 学会mybatis-plus的提供的api增删改查、和自定义Sql（userInfo类作为测试）
+4. 写一两个逻辑代码出来，并试着运行出来
+4. 慢慢替换数据库表的字段为 _ 规范，替换一个修改一般所有相关代码
+5. 慢慢将JDBC代码换成mybatis-plus的代码，能用提供的api就用，不能用的在自定义
+6. 学会鉴权jwt Token，并试着加密和解析所需的信息
+
+7. 对信息进行加密传输和存储，如密码
+8. 将accesstoken 换成 access token + refesh token的鉴权处理解决方案
+10.对域名进行请求拦截
+11.存储图片、视频、音频的资源先进行压缩再存储
+12.开启多线程服务
+```
