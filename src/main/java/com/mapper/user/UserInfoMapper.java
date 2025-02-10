@@ -1,5 +1,6 @@
-package com.dao.user;
+package com.mapper.user;
 
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.entity.user.UserInfo;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -14,7 +15,7 @@ import java.time.LocalDateTime;
  */
 @Mapper // 告诉springboot这是一个mybatis的mapper类
 @Repository // 将userInfoDao交由spring容器管理
-public interface UserInfoDao {
+public interface UserInfoMapper extends BaseMapper<UserInfo> {
 
     //查询用户信息
     UserInfo queryUser(@Param("telephone") String telephone);

@@ -4,9 +4,9 @@ import com.dto.CommonAuthInfoDto;
 import com.entity.user.AccountFroze;
 import com.utils.jwt.JwtUtil;
 import com.response.BaseResponse;
-import com.dao.user.AccountFrozeDao;
-import com.dao.user.UserFeatureAssociationsDao;
-import com.dao.user.UserInfoDao;
+import com.mapper.user.AccountFrozeMapper;
+import com.mapper.user.UserFeatureAssociationsMapper;
+import com.mapper.user.UserInfoMapper;
 import com.entity.user.UserInfo;
 import com.service.UserInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,18 +24,18 @@ import static com.utils.GenerateString.getCurrentDateTime;
 public class UserInfoServiceImpl implements UserInfoService {
 
     @Autowired
-    private UserInfoDao userInfoDao;
+    private UserInfoMapper userInfoMapper;
 
     @Autowired
-    private AccountFrozeDao accountFrozeDao;
+    private AccountFrozeMapper accountFrozeMapper;
 
     @Autowired
-    private UserFeatureAssociationsDao userFeatureAssociationsDao;
+    private UserFeatureAssociationsMapper userFeatureAssociationsMapper;
 
     @Override
     public BaseResponse<UserInfo> login(String telephone, String password) {
 
-        UserInfo userInfo = userInfoDao.queryUser(telephone);
+        UserInfo userInfo = userInfoMapper.queryUser(telephone);
         if (userInfo.getId().isEmpty()) {
             return BaseResponse.fail(204, "账号不存在，请先注册");
         }
@@ -44,7 +44,7 @@ public class UserInfoServiceImpl implements UserInfoService {
             return BaseResponse.fail(204, "账号或密码错误");
         }
 
-        AccountFroze frozeInfo = accountFrozeDao.queryUserForFroze(userInfo.getFrozeId());
+        AccountFroze frozeInfo = accountFrozeMapper.queryUserForFroze(userInfo.getFrozeId());
 
         // 当前时间与冻结时间
         LocalDateTime currentDateTime = Date.stringToLocalDateTime(Date.getCurrentDateTime());
@@ -64,7 +64,7 @@ public class UserInfoServiceImpl implements UserInfoService {
         userInfo.setToken(token);
 
         // 修改最新登录时间
-        userInfoDao.freshLoginTime(userInfo.getOpenId(), currentDateTime);
+        userInfoMapper.freshLoginTime(userInfo.getOpenId(), currentDateTime);
 
         return BaseResponse.success(userInfo, "成功");
     }
@@ -79,7 +79,7 @@ public class UserInfoServiceImpl implements UserInfoService {
             return BaseResponse.fail(400, "请填写完整的信息");
         }
 
-        UserInfo data = userInfoDao.queryUser(telephone);
+        UserInfo data = userInfoMapper.queryUser(telephone);
         if (data != null) {
             return BaseResponse.fail(204, "账号已存在");
         }
@@ -88,7 +88,7 @@ public class UserInfoServiceImpl implements UserInfoService {
         String userVipId = GenerateString.generateUUID(20);
         String userPictureId = GenerateString.generateUUID(20);
         String userApiId = GenerateString.generateUUID(20);
-        userFeatureAssociationsDao.addFunctionId(openId, userVipId, userPictureId, userApiId);
+        userFeatureAssociationsMapper.addFunctionId(openId, userVipId, userPictureId, userApiId);
 
         // 默认头像地址
         String avatar = "http://localhost:9000/api/icon/defaultAvatar.png";
@@ -96,7 +96,7 @@ public class UserInfoServiceImpl implements UserInfoService {
         userInfo.setCreateTime(getCurrentDateTime());
         userInfo.setFrozeId(frozeId);
         userInfo.setAvatar(avatar);
-        int id = userInfoDao.addUser(userInfo);
+        int id = userInfoMapper.addUser(userInfo);
 
         return BaseResponse.success(id + "","注册成功");
     }

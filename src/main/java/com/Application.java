@@ -1,5 +1,6 @@
 package com;
 
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -7,7 +8,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Bean;
-//import org.mybatis.spring.annotation.MapperScan;
 
 import com.utils.jwt.JwtFilter;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -15,6 +15,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 // 入口
 @SpringBootApplication // 主程序类 ,是组合注解
 @EnableScheduling // 定时任务
+@MapperScan("com.mapper")
 public class Application extends SpringBootServletInitializer{
     // 启动
     public static void main(String[] args) {
@@ -45,6 +46,7 @@ public class Application extends SpringBootServletInitializer{
      * XSRF/CSRF 防护：防止跨站请求伪造攻击。
      * */
     @Bean
+    // Bean用于将方法返回的对象交给 Spring 容器管理。
     public FilterRegistrationBean jwtFilter() {
         final FilterRegistrationBean registrationBean = new FilterRegistrationBean();
         JwtFilter filter = new JwtFilter();

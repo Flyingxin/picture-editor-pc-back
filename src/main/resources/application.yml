@@ -15,9 +15,19 @@ spring:
     username: root
     password: 123456
 
-mybatis:
+
+mybatis-plus:
+  mapper-locations: classpath:/sql/*.xml
   type-aliases-package: com.entity
-  mapper-locations: classpath:/mapper/*.xml
+  global-config:
+    db-config:
+      id-type: auto # 主键策略
+
+
+# 使用还需接口依赖相关注释
+#mybatis:
+#  type-aliases-package: com.entity
+#  mapper-locations: classpath:/mapper/*.xml
 
 ##server.port=9000
 ## ????????
